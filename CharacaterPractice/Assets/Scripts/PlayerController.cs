@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     private static readonly int isRolling = Animator.StringToHash("IsRolling");
     private static readonly int isAttacking = Animator.StringToHash("IsAttacking");
     private static readonly int isDashing = Animator.StringToHash("IsDashing");
+    private static readonly int isWallClimbing = Animator.StringToHash("IsWallClimbing");
 
 
     Animator animator;
@@ -83,7 +84,7 @@ public class PlayerController : MonoBehaviour
 
     public void CheckHit() // Execute In attack Animation
     {
-        Debug.Log("I'm hitting!!");
+        //Debug.Log("I'm hitting!!");
         float CheckDir = 1f;
         
 
@@ -272,6 +273,10 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator DoJump() // Give Power
     {
+        if (ghostDash.makeGhost) // While During Dash
+        {
+            rigid.gravityScale = playerGravityScale;
+        }
         rigid.AddForce(Vector2.up * jumpPower * rigid.mass, ForceMode2D.Impulse);
         animator.SetBool(isJumping, true);
         yield return new WaitForSeconds(0.1f);
@@ -279,12 +284,13 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    private void OnCollisionEnter2D(Collision2D collider) // Jump and wall Climb check
+    private void OnCollisionStay2D(Collision2D collider) // Jump and wall Climb check
     {
         //Debug.Log(collider.gameObject.tag);
         if (collider.gameObject.CompareTag("Floor"))
         {
-            Debug.Log(playerCollider.bounds.extents.y);
+            //Debug.Log(playerCollider.bounds.extents.x);
+            //Debug.Log(playerCollider.bounds.extents.y);
 
 
             for (int i = -1; i < 2; i++)
@@ -293,7 +299,7 @@ public class PlayerController : MonoBehaviour
                 RaycastHit2D hit = Physics2D.Raycast(transform.position + new Vector3(playerCollider.bounds.extents.x * i,0), new Vector2(0, -1), 0.3f, groundLayerMask); // is Grounded Check
                 if (hit.collider?.name != null)
                 {
-                    Debug.Log(hit.collider.name);
+                    //Debug.Log(hit.collider.name);
                     if (!isGrounded && Jumping)
                     {
                         //Falling = false;
@@ -309,16 +315,24 @@ public class PlayerController : MonoBehaviour
 
             for (int i = -1; i < 2; i += 2) // wall Climbing Check
             {
-                RaycastHit2D wallHit = Physics2D.Raycast(transform.position, new Vector2(i, 0), playerCollider.bounds.extents.x + 0.1f, groundLayerMask);
+                Debug.Log(i);
+                RaycastHit2D wallHit = Physics2D.Raycast(transform.position+new Vector3(playerCollider.bounds.extents.x * i,playerCollider.bounds.extents.y, 0), new Vector2(i, 0), 0.1f, groundLayerMask);
                 if (wallHit.collider?.name != null)
                 {
-                    Debug.Log("WallClimbing");
-
+                    if (Input.GetAxisRaw("Horizontal") * i > 0)// Two Case right wall right key, left wall left key
+                    {
+                        Debug.Log("I'm Climbing");
+                        animator.SetBool(isWallClimbing, true);
+                        rigid.gravityScale = 0f;
+                        return;
+                    }
                 }
-            }
 
-            
+            }
+            animator.SetBool(isWallClimbing, false);
+            rigid.gravityScale = playerGravityScale;
         }
+        
     }
 
 
