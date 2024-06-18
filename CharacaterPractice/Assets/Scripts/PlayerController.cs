@@ -29,6 +29,7 @@ public class PlayerController : MonoBehaviour
    
     
     public LayerMask enemyLayerMask;
+    public LayerMask groundLayerMask;
 
     public bool canRoll = true;           // skill on / off
     public bool canDash = true;           // skill on / off
@@ -78,7 +79,7 @@ public class PlayerController : MonoBehaviour
 
         if (spriteRenderer.flipX) CheckDir = -1f;
 
-        RaycastHit2D hit = Physics2D.Raycast(transform.position+ new Vector3(0, 1.3f, 0), new Vector2(1, 0) * CheckDir, 2f, enemyLayerMask);
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, new Vector2(1, 0) * CheckDir, 2f, enemyLayerMask);
         {
             
             if (hit.collider == null) return;
@@ -267,20 +268,23 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionStay2D(Collision2D collider)
     {
-
         //Debug.Log(collider.gameObject.tag);
         if (collider.gameObject.CompareTag("Floor"))
         {
-            //Debug.Log(GetComponent<Collider2D>().bounds.center.y);
-            //Debug.Log(GetComponent<Collider2D>().bounds.extents.y);
-            
-            if (!isGrounded && Jumping)
+            RaycastHit2D hit = Physics2D.Raycast(transform.position,new Vector2(0, -1), 0.1f, groundLayerMask);
+
+
+            if (hit.collider?.name != null)
             {
-               //Falling = false;
-               isGrounded = true;
-               Jumping = false;
-               animator.SetBool(isFalling, false);
-               animator.SetBool(isJumping, false);
+                Debug.Log(hit.collider.name);
+                if (!isGrounded && Jumping)
+                {
+                    //Falling = false;
+                    isGrounded = true;
+                    Jumping = false;
+                    animator.SetBool(isFalling, false);
+                    animator.SetBool(isJumping, false);
+                }
             }
             
         }

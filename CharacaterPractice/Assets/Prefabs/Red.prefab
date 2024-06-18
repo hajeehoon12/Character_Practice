@@ -128,7 +128,10 @@ MonoBehaviour:
   isGrounded: 1
   enemyLayerMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 128
+  groundLayerMask:
+    serializedVersion: 2
+    m_Bits: 512
   canRoll: 1
   canDash: 1
   canComboAttack: 1
@@ -193,10 +196,10 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0.21387473}
+  m_Offset: {x: 0, y: 0.09759725}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.49999997, y: -0.6666667}
+    pivot: {x: 0.49999997, y: 0}
     oldSize: {x: 0.15, y: 0.18}
     newSize: {x: 0.15, y: 0.18}
     adaptiveTilingThreshold: 0.5
@@ -204,7 +207,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.15, y: 0.1961366}
+  m_Size: {x: 0.15, y: 0.19613661}
   m_EdgeRadius: 0
 --- !u!114 &7964954611461161073
 MonoBehaviour:

@@ -1819,34 +1819,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Red
       objectReference: {fileID: 0}
-    - target: {fileID: 4927295013119526123, guid: ddf36da5fd83ac34f8f0779d2cd88ce6, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: -7849658766492704550, guid: 8a0bf82816ef7264f9469c139f71b56c, type: 3}
-    - target: {fileID: 5530387180077106046, guid: ddf36da5fd83ac34f8f0779d2cd88ce6, type: 3}
-      propertyPath: m_Size.y
-      value: 0.19613661
-      objectReference: {fileID: 0}
-    - target: {fileID: 5530387180077106046, guid: ddf36da5fd83ac34f8f0779d2cd88ce6, type: 3}
-      propertyPath: m_Offset.y
-      value: 0.09759725
-      objectReference: {fileID: 0}
-    - target: {fileID: 5530387180077106046, guid: ddf36da5fd83ac34f8f0779d2cd88ce6, type: 3}
-      propertyPath: m_SpriteTilingProperty.pivot.x
-      value: 0.49999997
-      objectReference: {fileID: 0}
-    - target: {fileID: 5530387180077106046, guid: ddf36da5fd83ac34f8f0779d2cd88ce6, type: 3}
-      propertyPath: m_SpriteTilingProperty.pivot.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5530387180077106046, guid: ddf36da5fd83ac34f8f0779d2cd88ce6, type: 3}
-      propertyPath: m_SpriteTilingProperty.oldSize.x
-      value: 0.15
-      objectReference: {fileID: 0}
-    - target: {fileID: 5530387180077106046, guid: ddf36da5fd83ac34f8f0779d2cd88ce6, type: 3}
-      propertyPath: m_SpriteTilingProperty.oldSize.y
-      value: 0.18
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1864,7 +1836,7 @@ GameObject:
   - component: {fileID: 1274604174}
   - component: {fileID: 1274604173}
   - component: {fileID: 1274604175}
-  m_Layer: 3
+  m_Layer: 9
   m_Name: Tilemap
   m_TagString: Floor
   m_Icon: {fileID: 0}
