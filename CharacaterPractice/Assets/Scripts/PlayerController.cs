@@ -20,13 +20,15 @@ public class PlayerController : MonoBehaviour
     Rigidbody2D rigid;
     SpriteRenderer spriteRenderer;
     GhostDash ghostDash;
+    Collider2D playerCollider;
 
     bool Jumping = false;           // AM i Jumping?
     //bool Falling = false;
     bool Rolling = false;           // AM i rolling?
     public bool isGrounded = true;  // AM i on the ground?
     bool canCombo = false;          // AM i doing combo attack
-   
+
+    private float playerGravityScale;
     
     public LayerMask enemyLayerMask;
     public LayerMask groundLayerMask;
@@ -49,7 +51,15 @@ public class PlayerController : MonoBehaviour
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         ghostDash = GetComponent<GhostDash>();
+        playerCollider = GetComponent<Collider2D>();
+        
     }
+
+    private void Start()
+    {
+        playerGravityScale = rigid.gravityScale;
+    }
+
     private void FixedUpdate()
     {
         Move();
@@ -94,13 +104,14 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    void OnDash()
+    void OnDash() // when C keyboard input do dash
     {
-
         if (!canDash) return;
 
         if (!ghostDash.makeGhost)
         {
+            rigid.gravityScale = 0f;
+            rigid.velocity = new Vector2(rigid.velocity.x, 0); // gravity done;
             ghostDash.makeGhost = true;
             animator.SetBool(isDashing, true);
             animator.SetBool(isAttacking, false);
@@ -110,12 +121,12 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    void OnClick()
+    void OnClick() // When Clicked
     {
         OnAttack();
     }
 
-    IEnumerator DoingDash()
+    IEnumerator DoingDash() // Do Coroutine During Dash
     {
         while (ghostDash.makeGhost)
         {
@@ -129,17 +140,19 @@ public class PlayerController : MonoBehaviour
             }
             yield return new WaitForSeconds(0.02f);
         }
+        
         yield return null;
     }
 
-    public void DashOff()
+    public void DashOff() //When Dash Animation End
     {
+        rigid.gravityScale = playerGravityScale;
         ghostDash.makeGhost = false;
         animator.SetBool(isDashing, false);
     }
     
 
-    void OnRoll()
+    void OnRoll() // When Shift called Do Rolling
     {
         if (!canRoll) return;
 
@@ -162,7 +175,7 @@ public class PlayerController : MonoBehaviour
         
     }
 
-    void OnAttack()
+    void OnAttack() // Z button called
     {
             //Debug.Log("Attack!!");
         animator.SetBool(isAttacking, true);
@@ -191,7 +204,7 @@ public class PlayerController : MonoBehaviour
     }
     
 
-    public void RollEnd()
+    public void RollEnd() // When Roll Animation End Called
     {
         animator.SetBool(isRolling, false);
         Rolling = false;
@@ -230,7 +243,7 @@ public class PlayerController : MonoBehaviour
         transform.position += moveVelocity * maxSpeed * Time.deltaTime;
     }
 
-    private void OnJump()
+    private void OnJump() // Space Button = Jump
     {
         //Debug.Log(rigid.velocity.y);
         if (Rolling) return;
@@ -245,7 +258,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void JumpCheck()
+    void JumpCheck() // need to check When player Start Falling Down
     {
         if (rigid.velocity.y < 0 && !isGrounded && Jumping)
         {
@@ -257,7 +270,7 @@ public class PlayerController : MonoBehaviour
 
 
 
-    IEnumerator DoJump()
+    IEnumerator DoJump() // Give Power
     {
         rigid.AddForce(Vector2.up * jumpPower * rigid.mass, ForceMode2D.Impulse);
         animator.SetBool(isJumping, true);
@@ -266,26 +279,44 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    private void OnCollisionStay2D(Collision2D collider)
+    private void OnCollisionEnter2D(Collision2D collider) // Jump and wall Climb check
     {
         //Debug.Log(collider.gameObject.tag);
         if (collider.gameObject.CompareTag("Floor"))
         {
-            RaycastHit2D hit = Physics2D.Raycast(transform.position,new Vector2(0, -1), 0.1f, groundLayerMask);
+            Debug.Log(playerCollider.bounds.extents.y);
 
 
-            if (hit.collider?.name != null)
+            for (int i = -1; i < 2; i++)
             {
-                Debug.Log(hit.collider.name);
-                if (!isGrounded && Jumping)
+
+                RaycastHit2D hit = Physics2D.Raycast(transform.position + new Vector3(playerCollider.bounds.extents.x * i,0), new Vector2(0, -1), 0.3f, groundLayerMask); // is Grounded Check
+                if (hit.collider?.name != null)
                 {
-                    //Falling = false;
-                    isGrounded = true;
-                    Jumping = false;
-                    animator.SetBool(isFalling, false);
-                    animator.SetBool(isJumping, false);
+                    Debug.Log(hit.collider.name);
+                    if (!isGrounded && Jumping)
+                    {
+                        //Falling = false;
+                        isGrounded = true;
+                        Jumping = false;
+                        animator.SetBool(isFalling, false);
+                        animator.SetBool(isJumping, false);
+
+                    }
+                    return;
                 }
             }
+
+            for (int i = -1; i < 2; i += 2) // wall Climbing Check
+            {
+                RaycastHit2D wallHit = Physics2D.Raycast(transform.position, new Vector2(i, 0), playerCollider.bounds.extents.x + 0.1f, groundLayerMask);
+                if (wallHit.collider?.name != null)
+                {
+                    Debug.Log("WallClimbing");
+
+                }
+            }
+
             
         }
     }
