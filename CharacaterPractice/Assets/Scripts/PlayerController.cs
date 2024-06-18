@@ -26,20 +26,25 @@ public class PlayerController : MonoBehaviour
     bool Rolling = false;           // AM i rolling?
     public bool isGrounded = true;  // AM i on the ground?
     bool canCombo = false;          // AM i doing combo attack
-    //public float attackRate = 10f;
+   
     
     public LayerMask enemyLayerMask;
 
-    public bool canRoll = false;
-    public bool canDash = false;
-    public bool canComboAttack = false;
-    
+    public bool canRoll = true;           // skill on / off
+    public bool canDash = true;           // skill on / off
+    public bool canComboAttack = true;    // skill on / off
 
-    int floatCount = 0;
+
+    public float attackRate = 10f;  //attack Damage
+    public int ComboCount;          // current combo Count
+
+
+
+
 
     void Awake()
     {
-        rigid = GetComponent<Rigidbody2D>();
+        rigid = GetComponentInParent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         ghostDash = GetComponent<GhostDash>();
@@ -50,11 +55,7 @@ public class PlayerController : MonoBehaviour
     }
     void Update()
     {
-        //Dash();
-
-        //Attack();
-
-        //Roll();
+        
 
         JumpCheck(); // Checking wheter can jump
 
@@ -65,25 +66,13 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    private void Start()
-    {
-        StartCoroutine(DoClick());
-    }
-
-    IEnumerator DoClick()
-    {
-        while (true)
-        {
-            OnClick();
-            yield return new WaitForSeconds(3f);
-        }
-    }
+   
 
   
 
-    public void CheckHit()
+    public void CheckHit() // Execute In attack Animation
     {
-        //Debug.Log("I'm hitting!!");
+        Debug.Log("I'm hitting!!");
         float CheckDir = 1f;
         
 
@@ -94,9 +83,9 @@ public class PlayerController : MonoBehaviour
             
             if (hit.collider == null) return;
             //Debug.Log(hit.collider.name);
-            if (hit.transform.gameObject.TryGetComponent(out Reward reward))
+            if (hit.transform.gameObject.TryGetComponent(out Monster monster))
             {
-                reward.GivePlayerReward(reward.inven.attackRate * (1+floatCount*0.1f));
+                monster.GetDamage(attackRate);
             }
                 
         }
@@ -162,13 +151,13 @@ public class PlayerController : MonoBehaviour
 
     void ComboStart()
     {
-        floatCount = 0;    
+        ComboCount = 0;    
     }
 
     void ComboSum()
     {
-        floatCount++;
-        //Debug.Log(floatCount);
+        ComboCount++;
+        
     }
 
     void OnAttack()
@@ -281,15 +270,18 @@ public class PlayerController : MonoBehaviour
         //Debug.Log(collider.gameObject.tag);
         if (collider.gameObject.CompareTag("Floor"))
         {
+            //Debug.Log(GetComponent<Collider2D>().bounds.center.y);
+            //Debug.Log(GetComponent<Collider2D>().bounds.extents.y);
             
             if (!isGrounded && Jumping)
             {
-                //Falling = false;
-                isGrounded = true;
-                Jumping = false;
-                animator.SetBool(isFalling, false);
-                animator.SetBool(isJumping, false);
+               //Falling = false;
+               isGrounded = true;
+               Jumping = false;
+               animator.SetBool(isFalling, false);
+               animator.SetBool(isJumping, false);
             }
+            
         }
     }
 

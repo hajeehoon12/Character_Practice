@@ -22,6 +22,8 @@ AnimationClip:
     curve:
     - time: 0
       value: {fileID: 7454190161666216139, guid: 8a0bf82816ef7264f9469c139f71b56c, type: 3}
+    - time: 0.01
+      value: {fileID: 7454190161666216139, guid: 8a0bf82816ef7264f9469c139f71b56c, type: 3}
     - time: 0.05
       value: {fileID: 1350747935624708955, guid: 8a0bf82816ef7264f9469c139f71b56c, type: 3}
     - time: 0.1
@@ -65,6 +67,7 @@ AnimationClip:
       isSerializeReferenceCurve: 0
     pptrCurveMapping:
     - {fileID: 7454190161666216139, guid: 8a0bf82816ef7264f9469c139f71b56c, type: 3}
+    - {fileID: 7454190161666216139, guid: 8a0bf82816ef7264f9469c139f71b56c, type: 3}
     - {fileID: 1350747935624708955, guid: 8a0bf82816ef7264f9469c139f71b56c, type: 3}
     - {fileID: -6912825524691515396, guid: 8a0bf82816ef7264f9469c139f71b56c, type: 3}
     - {fileID: -2575849811930229007, guid: 8a0bf82816ef7264f9469c139f71b56c, type: 3}
@@ -107,15 +110,15 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 0.08
-    functionName: CheckHit
+  - time: 0.05
+    functionName: ComboEnable
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 0.1
-    functionName: ComboEnable
+  - time: 0.08
+    functionName: CheckHit
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
