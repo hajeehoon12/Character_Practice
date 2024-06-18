@@ -102,6 +102,7 @@ public class PlayerController : MonoBehaviour
         {
             ghostDash.makeGhost = true;
             animator.SetBool(isDashing, true);
+            animator.SetBool(isAttacking, false);
             StartCoroutine(DoingDash());
         }
 
