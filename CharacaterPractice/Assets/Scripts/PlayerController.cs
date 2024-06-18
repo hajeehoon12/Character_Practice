@@ -38,6 +38,8 @@ public class PlayerController : MonoBehaviour
     public bool canDash = true;           // skill on / off
     public bool canComboAttack = true;    // skill on / off
 
+    Vector2 boundPlayer;
+
 
     public float attackRate = 10f;  //attack Damage
     public int ComboCount;          // current combo Count
@@ -59,6 +61,7 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         playerGravityScale = rigid.gravityScale;
+        boundPlayer = playerCollider.bounds.extents;
     }
 
     private void FixedUpdate()
@@ -289,8 +292,8 @@ public class PlayerController : MonoBehaviour
         //Debug.Log(collider.gameObject.tag);
         if (collider.gameObject.CompareTag("Floor"))
         {
-            //Debug.Log(playerCollider.bounds.extents.x);
-            //Debug.Log(playerCollider.bounds.extents.y);
+            //Debug.Log(boundPlayer.x);
+            //Debug.Log(boundPlayer.y);
 
 
             for (int i = -1; i < 2; i++)
@@ -316,21 +319,21 @@ public class PlayerController : MonoBehaviour
             for (int i = -1; i < 2; i += 2) // wall Climbing Check
             {
                 Debug.Log(i);
-                RaycastHit2D wallHit = Physics2D.Raycast(transform.position+new Vector3(playerCollider.bounds.extents.x * i,playerCollider.bounds.extents.y, 0), new Vector2(i, 0), 0.1f, groundLayerMask);
+                RaycastHit2D wallHit = Physics2D.Raycast(transform.position+new Vector3(boundPlayer.x * i, boundPlayer.y, 0), new Vector2(i, 0), 0.1f, groundLayerMask);
                 if (wallHit.collider?.name != null)
                 {
                     if (Input.GetAxisRaw("Horizontal") * i > 0)// Two Case right wall right key, left wall left key
                     {
                         Debug.Log("I'm Climbing");
                         animator.SetBool(isWallClimbing, true);
-                        rigid.gravityScale = 0f;
+                        //rigid.gravityScale = 0f;
                         return;
                     }
                 }
 
             }
             animator.SetBool(isWallClimbing, false);
-            rigid.gravityScale = playerGravityScale;
+            //rigid.gravityScale = playerGravityScale;
         }
         
     }
