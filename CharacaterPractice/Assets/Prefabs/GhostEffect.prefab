@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 479878198638643393}
   - component: {fileID: 5954493897422501897}
   m_Layer: 0
-  m_Name: Red 1
+  m_Name: GhostEffect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
